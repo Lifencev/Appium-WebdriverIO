@@ -1,0 +1,74 @@
+name: Run BrowserStack Tests with Allure Report
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  run-browserstack-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'  
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests on BrowserStack
+        run: npm run test:android:bs
+
+      - name: Upload Allure Results for Next Job
+        if: always() 
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: ./reporters/allure-results
+
+  generate-allure-report:
+    runs-on: ubuntu-latest
+    needs: run-browserstack-tests
+    steps:
+      - name: Download Allure Results
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: ./reporters/allure-results
+
+      - name: Set Up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Install Allure CLI
+        run: |
+          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.32.0/allure-2.32.0.tgz
+          tar -zxvf allure.tgz -C /opt/
+          sudo ln -s /opt/allure-2.32.0/bin/allure /usr/bin/allure
+
+      - name: Generate Allure Report
+        run: allure generate ./reporters/allure-results --clean -o ./allure-report
+
+      - name: Upload Allure Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: ./allure-report
+
+      - name: Deploy Allure Report to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report

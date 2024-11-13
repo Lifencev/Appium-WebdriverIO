@@ -1,0 +1,6 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","8360","create new player with valid name","","Wed Nov 13 07:24:02 EET 2024","passed","Wed Nov 13 07:24:10 EET 2024","","Testing the start of the game","",""
+"","3259","check that all buttons on the welcome page are present","","Wed Nov 13 07:25:05 EET 2024","passed","Wed Nov 13 07:25:09 EET 2024","","Testing of welcome page","",""
+"","9280","check first 4 card names in the help section","","Wed Nov 13 07:25:14 EET 2024","passed","Wed Nov 13 07:25:23 EET 2024","","Testing of welcome page","",""
+"","5192","connect to the game with an empty key (-)","","Wed Nov 13 07:25:09 EET 2024","passed","Wed Nov 13 07:25:14 EET 2024","","Testing of welcome page","",""
+"","18174","start the game only with 3 created players and 2 spies","","Wed Nov 13 07:24:10 EET 2024","passed","Wed Nov 13 07:24:28 EET 2024","","Testing the start of the game","",""

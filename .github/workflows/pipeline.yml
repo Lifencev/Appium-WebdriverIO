@@ -33,19 +33,9 @@ jobs:
       - name: Run Tests on BrowserStack
         run: npm run test:android:bs
 
-      - name: Upload Allure Results for Next Job
+      - name: Upload Allure Results
         if: always() 
         uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: ./reporters/allure-results
-
-  generate-allure-report:
-    runs-on: ubuntu-latest
-    needs: run-browserstack-tests
-    steps:
-      - name: Download Allure Results
-        uses: actions/download-artifact@v4
         with:
           name: allure-results
           path: ./reporters/allure-results
@@ -54,7 +44,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
-          java-version: '11'
+          java-version: '17'
 
       - name: Install Allure CLI
         run: |
@@ -64,20 +54,3 @@ jobs:
 
       - name: Generate Allure Report
         run: allure generate ./reporters/allure-results --clean -o ./allure-report
-
-      - name: Upload Allure Report as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: ./allure-report
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Deploy Allure Report to GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./allure-report
-          publish_branch: gh-pages

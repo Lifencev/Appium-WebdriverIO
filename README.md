@@ -2,9 +2,9 @@
 
 This is a project to test an Android application using the tools mentioned above.
 
-After each push to the main branch, tests are launched on the BrowserStack cloud service, based on which an Allure report is created, which is hosted on GitHub Action. 
+After each push to the main branch, tests are launched on the BrowserStack cloud service, based on which also an Allure report is created. 
 
-Of course, the Page Object template is used.
+Of course, the Page Object Model template is used.
 
 ## Setup
 
